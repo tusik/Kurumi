@@ -8,12 +8,31 @@ class Manager(Plugin):
     def register_commands(self):
         @self.cmd("plugin", "插件功能")
         async def plugin(self, message: Message, params=None):
-            # 第一种用reply发送消息
-            #await message.reply(content=content)
+            if params == "help":
+                content = "以下是plugin命令可用的参数：\n"
+                content = content + "/plugin list: 列出所有插件\n"
+                content = content + "/plugin reload [name]: 重载插件\n"
+                await message.reply(content=content)
+            elif "reload" in params:
+                texts = params.split(" ")
+                if len(texts) < 2:
+                    await message.reply(content="缺少参数: name")
+                    return False
+                plugin_name = texts[1]
+                if plugin_name in self.core.plugin_objects:
+                    self.core.plugin_objects[plugin_name] = self.core.plugin_objects[plugin_name].__class__(self.core,api=self.api)
+                    await message.reply(content=f"插件[{plugin_name}]重载成功喵~")
+                else:
+                    await message.reply(content=f"插件[{plugin_name}]不存在")
+            elif "list" in params:
+                content = "以下是现在支持的插件：\n"
+                for name, plugin_object in self.core.plugin_objects.items():
+                    content = content + f"插件名 {name}\n"
+                await message.reply(content=content)
             return True
 
         @self.cmd("me", "获取用户当前信息")
-        async def plugin(self, message: Message, params=None):
+        async def me(self, message: Message, params=None):
             roles = []
             for i in message.member.roles:
                 if i == '2':
