@@ -1,22 +1,20 @@
-from plugins.plugin import Plugin, KurumiCommands
 from botpy.message import Message
+
+from plugins.plugin import Plugin
 
 
 class DND(Plugin):
-    def __init__(self, api):
-        super().__init__("DND")
-        self.api = api
+    name = "DND"
 
-    @Plugin.cmd("dnd")
-    async def dnd(self, message: Message, params=None):
-        content = f"你好，{message.author.username}，你的参数是：dnd {params}"
-        # 第一种用reply发送消息
-        await message.reply(content=content)
-        return True
+    def register_commands(self):
+        @self.cmd("dnd", "这是一个DND游戏的插件")
+        async def dnd(message, params=None):
+            content = f"你好，{message.author.username}，你的参数是：dnd {params}"
+            await message.reply(content=content)
+            return True
 
-    @Plugin.cmd("join")
-    async def join(self, message: Message, params=None):
-        content = f"你好，{message.author.username}，你的参数是：join {params}"
-        # 第一种用reply发送消息
-        await message.reply(content=content)
-        return True
+        @self.cmd("join", "加入游戏")
+        async def join(message, params=None):
+            content = f"你好，{message.author.username}，你的参数是：join {params}"
+            await message.reply(content=content)
+            return True
