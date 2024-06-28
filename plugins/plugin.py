@@ -8,50 +8,25 @@ from botpy.message import BaseMessage
 
 from plugins import *
 
-
-def KurumiPlugin(cls):
-    print(f"注册新的插件: {cls.__name__}")
-
-    def decorator():
-        plugin_list.append(cls())
+def KurumiPlugin(name=None):
+    def decorator(cls):
+        print(f"注册新的插件: {cls.__name__}")
+        cls.name = name if name else cls.__name__
         return cls
-
     return decorator
 
 
-class KurumiCommands:
-    """
-    指令装饰器
-
-    Args:
-      args (tuple): 字符串元组。
-    """
-
-    def __init__(self, *args):
-        self.commands = args
-
-    def __call__(self, func):
-        @wraps(func)
-        async def decorated(*args, **kwargs):
-            print(args, kwargs)
-            message: BaseMessage = args[2]
-            for command in self.commands:
-                if command in message.content:
-                    # 分割指令后面的指令参数
-                    params = message.content.split(command)[1].strip()
-                    kwargs["params"] = params
-                    return await func(*args, **kwargs)
-            return False
-
-        return decorated
-
-
 class Plugin:
-    def __init__(self, api=None, name=None):
+    def __init__(self, core, api=None, name=None):
         self.api = api
-        self.name = name
+        if name is not None:
+            self.name = name
+        self.core = core
         self.handlers = {}
         self.register_commands()
+
+    def __del__(self):
+        print(f"卸载插件: {self.name}")
 
     def register_commands(self):
         pass

@@ -7,18 +7,19 @@ import plugins.dnd
 import plugins.manager
 from plugins import *
 from plugins import plugin
+from bot.core import BotCore
 
 _log = logging.get_logger()
 
-plugin_objects = {}
+bot_core = BotCore()
 
 
 def plugin_register(api: BotAPI):
     # 暂时先手动注册插件子类
-    dnd = plugins.dnd.DND(api=api, )
-    manager = plugins.manager.Manager(api=api)
-    plugin_objects["dnd"] = dnd
-    plugin_objects["manager"] = manager
+    dnd = plugins.dnd.DND(bot_core,api=api)
+    manager = plugins.manager.Manager(bot_core,api=api)
+    bot_core.plugin_objects["dnd"] = dnd
+    bot_core.plugin_objects["manager"] = manager
 
 
 class Kurumi(botpy.Client):
@@ -28,7 +29,7 @@ class Kurumi(botpy.Client):
 
     async def help(self, message: Message):
         content = "以下是现在支持的命令：\n"
-        for name, plugin_object in plugin_objects.items():
+        for name, plugin_object in bot_core.plugin_objects.items():
             content = content + f"插件名 {name}\n"
             content = content + plugin_object.get_cmd_describe()
         await message.reply(content=content)
@@ -37,7 +38,7 @@ class Kurumi(botpy.Client):
         if '/help' in message.content:
             await self.help(message)
         else:
-            for name, plugin_object in plugin_objects.items():
+            for name, plugin_object in bot_core.plugin_objects.items():
                 for command_name, command_func in plugin_object.handlers.items():
                     if command_name in message.content:
                         params = message.content.split(command_name)[1].strip()
