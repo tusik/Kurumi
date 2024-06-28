@@ -47,28 +47,31 @@ class KurumiCommands:
 
 
 class Plugin:
-    handlers = {
-
-    }
-    api = None
-
-    def __init__(self, name):
+    def __init__(self, api=None, name=None):
+        self.api = api
         self.name = name
+        self.handlers = {}
+        self.register_commands()
+
+    def register_commands(self):
+        pass
 
     def run(self):
         print(f'Running plugin {self.name}')
 
-    @classmethod
-    def cmd(cls, alias: str):
-        def decorator(func: Callable[[Any], Any]):
-            @wraps(func)
-            async def wrapper(*args, **kwargs):
-                return await func(*args, **kwargs)
-
-            # 设置函数的别名
-            wrapper.__alias__ = alias
-            # 将函数添加到 handlers 字典中
-            cls.handlers[alias] = wrapper
-            return wrapper
+    def cmd(self, alias, description):
+        def decorator(func):
+            self.handlers[alias] = {
+                'function': func,
+                'description': description
+            }
+            return func
 
         return decorator
+
+    def get_cmd_describe(self):
+        content = ""
+        for alias, handler in self.handlers.items():
+            desc = handler["description"]
+            content = content + f"{alias}: {desc} \n"
+        return content
