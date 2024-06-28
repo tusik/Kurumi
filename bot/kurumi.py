@@ -41,4 +41,4 @@ class Kurumi(botpy.Client):
                 for command_name, command_func in plugin_object.handlers.items():
                     if command_name in message.content:
                         params = message.content.split(command_name)[1].strip()
-                        await command_func(plugin_object, message=message, params=params)
+                        await command_func["function"](plugin_object, message=message, params=params)
