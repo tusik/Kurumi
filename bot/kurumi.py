@@ -1,26 +1,31 @@
 # -*- coding: utf-8 -*-
 import botpy
 from botpy import logging, BotAPI
-
-from botpy.ext.command_util import Commands
 from botpy.message import Message
+
+import plugins.dnd
+from plugins import *
+from plugins import plugin
 
 _log = logging.get_logger()
 
-@Commands("跑团", "dnd")
-async def dnd(api: BotAPI, message: Message, params=None):
-    _log.info(params)
-    content = f"你好，{message.author.username}，你的参数是：{params}"
-    # 第一种用reply发送消息
-    await message.reply(content=params)
-    return True
+plugin_objects = {}
+
+
+def plugin_register(api: BotAPI):
+    # 暂时先手动注册插件子类
+    dnd = plugins.dnd.DND(api)
+    plugin_objects["dnd"] = dnd
+
 
 class Kurumi(botpy.Client):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        plugin_register(self.api)
+
     async def on_at_message_create(self, message: Message):
-        # 注册指令handler
-        handlers = [
-            dnd,
-        ]
-        for handler in handlers:
-            if await handler(api=self.api, message=message):
-                return
+        for name, plugin_object in plugin_objects.items():
+            for command_name, command_func in plugin_object.handlers.items():
+                if command_name in message.content:
+                    params = message.content.split(command_name)[1].strip()
+                    await command_func(plugin_object, message=message, params=params)
