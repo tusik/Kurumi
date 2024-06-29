@@ -12,18 +12,18 @@
 此项目目标是以qq为平台结合LLM开发一个智能体机器人，目前没有QQ群权限，只能以qq频道为前期目标。
 
 ## Road map
-- [WIP] 插件系统
-  - [WIP] 插件注册装饰器
-  - [√] 插件命令注册装饰器
+- [ ] 插件系统 WIP
+  - [ ] 插件注册装饰器 WIP
+  - [x] 插件命令注册装饰器
   - [ ] 动态插件载入功能
 
-- [WIP] 插件
-  - [WIP] 插件管理插件
-  - [WIP] 天气插件
+- [ ] 插件 WIP
+  - [x] 插件管理插件 
+  - [ ] 天气插件 WIP
   - [ ] 签到插件
 
-- [WIP] LLM
-  - [WIP] OpenAI接入
+- [ ] LLM WIP
+  - [ ] OpenAI接入 WIP
   - [ ] 通用Function calling实现
   - [ ] OpenAI API兼容接入
 
