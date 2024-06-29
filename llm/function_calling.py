@@ -1,7 +1,7 @@
 import regex,json
 
 def find_json(content):
-    json_pattern = r"\{.*\}"
+    json_pattern = r"\{[\s\S]*?\}"
     json_result = regex.findall(json_pattern, content)
     return json_result
 
