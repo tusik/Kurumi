@@ -6,7 +6,7 @@ class Manager(Plugin):
     name = "manager"
 
     def register_commands(self):
-        @self.cmd("plugin", "插件功能")
+        @self.cmd("/plugin", "插件功能")
         async def plugin(self, message: Message, params=None):
             if params == "help":
                 content = "以下是plugin命令可用的参数：\n"
@@ -31,7 +31,7 @@ class Manager(Plugin):
                 await message.reply(content=content)
             return True
 
-        @self.cmd("me", "获取用户当前信息")
+        @self.cmd("/me", "获取用户当前信息")
         async def me(self, message: Message, params=None):
             roles = []
             for i in message.member.roles:

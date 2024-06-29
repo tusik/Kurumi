@@ -1,2 +1,3 @@
 qq-botpy
 langchain
+langchain-openai
