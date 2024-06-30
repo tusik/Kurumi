@@ -1,8 +1,12 @@
 appid: "123"
 secret: "xxxx"
 
-OpenWeather:
-  api_key: "xxx"
+plugins:
+  weather:
+    cache_path: "cache"
+    OpenWeather:
+      api_key: "xxx"
+
 
 OpenAI:
   api_key: "sk-xxx"
