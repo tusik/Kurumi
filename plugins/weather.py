@@ -6,7 +6,7 @@ from llm.function_calling import *
 from botpy.types.message import Embed, EmbedField
 from utils.weather_help import draw_today
 
-api_url = "https://api.openweathermap.org/data/2.5/weather?q={city},{country}&appid={APIkey}"
+api_url = "https://api.openweathermap.org/data/2.5/weather?q={city},{country}&appid={APIkey}&lang=zh_cn"
 
 
 def f_to_c(f):
