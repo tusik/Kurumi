@@ -45,7 +45,18 @@ class Kurumi(botpy.Client):
             await self.help(message)
         else:
             for name, plugin_object in bot_core.plugin_objects.items():
-                for command_name, command_func in plugin_object.handlers.items():
-                    if "> "+command_name in message.content:
-                        params = message.content.split(command_name)[1].strip()
-                        await command_func["function"](plugin_object, message=message, params=params)
+                command_root = getattr(plugin_object, 'route', None)
+                if command_root is not None and "> /" + command_root in message.content:
+                    command_params = message.content.split(command_root)[1].strip()
+                    sub_command = command_params.split(" ")[0].strip()
+
+                    command_found = False
+                    for command_name, command_func in plugin_object.handlers.items():
+                        if command_name == sub_command:
+                            command_found = True
+                            params = message.content.split(command_name)[1].strip()
+                            await command_func["function"](plugin_object, message=message, params=params)
+
+                    if command_found is False and "main" in plugin_object.handlers:
+                        await plugin_object.handlers["main"]["function"](plugin_object, message=message, params=command_params)
+

@@ -17,7 +17,7 @@ def k_to_c(k):
     return round(k - 273.15, 1)
 
 
-@KurumiPlugin(name="Weather")
+@KurumiPlugin(name="Weather", route="weather")
 class Weather(Plugin):
     def get_location_llm(self, content):
         GET_LOCATION_PROMPT = """
@@ -38,7 +38,7 @@ class Weather(Plugin):
         return llm_json
 
     def register_commands(self):
-        @self.cmd("/weather", "获取天气信息")
+        @self.cmd("main", "获取天气信息")
         async def weather(self, message, params=None):
             plugin_config = self.core.config["plugins"]["weather"]
             if params is None:
