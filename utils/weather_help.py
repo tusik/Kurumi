@@ -86,17 +86,16 @@ def draw_today(weather_json, save_path):
         draw.text((20, 180), f"Humidity: {humidity}%", font=info_font, fill=(0, 0, 0))
 
         # 绘制右下角的文本
-        footer_text = "@Kurumi器人"
+        footer_text = "@Kurumi"
         bbox = draw.textbbox((0, 0), footer_text, font=footer_font)  # 获取文本的边界框
         text_width = bbox[2] - bbox[0]
         text_height = bbox[3] - bbox[1]
         draw.text((width - text_width - 20, height - text_height - 20), footer_text, font=footer_font, fill=(0, 0, 0))
 
-        rand_id = random.Random().random()*1000
+        rand_id = random.Random().random() * 1000
         file_name = f'{save_path}/{rand_id}_weather_banner.png'
         # 保存图像
         image.save(file_name)
         return file_name
     except:
         return None
-

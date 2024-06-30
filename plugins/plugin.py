@@ -8,20 +8,25 @@ from botpy.message import BaseMessage
 
 from plugins import *
 
-def KurumiPlugin(name=None):
+
+def KurumiPlugin(name=None, route=None):
     def decorator(cls):
         print(f"注册新的插件: {cls.__name__}")
         cls.name = name if name else cls.__name__
+        cls.route = route
         return cls
+
     return decorator
 
 
 class Plugin:
-    def __init__(self, core, api=None, name=None):
+    def __init__(self, core, api=None, name=None, route=None):
         self.api = api
         if name is not None:
             self.name = name
         self.core = core
+        if route is not None:
+            self.route = route
         self.handlers = {}
         self.register_commands()
 
