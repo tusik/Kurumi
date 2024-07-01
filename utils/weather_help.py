@@ -14,7 +14,7 @@ example_weather_json = '''
     },
     "weather": [
         {
-            "id": 800,
+            "id": 804,
             "main": "Clear",
             "description": "clear sky",
             "icon": "01d"
@@ -55,7 +55,7 @@ example_weather_json = '''
 }
 '''
 
-
+font_name = r"C:\Users\Image\Downloads\SourceHanSans-VF.ttf.ttc"
 class WeatherCondition(Enum):
     THUNDERSTORM_WITH_LIGHT_RAIN = (200, "雷暴", "雷暴伴有小雨", "11d")
     THUNDERSTORM_WITH_RAIN = (201, "雷暴", "雷暴伴有雨", "11d")
@@ -158,9 +158,9 @@ def create_radial_gradient(size, center, max_radius, start_color, end_color):
 
 def draw_weather_icon(weather_code, img):
     wc = WeatherCondition.get_by_code(weather_code)
-    weather_icon = Image.open(f'resource/weather/{wc.value[3]}.png').convert("RGBA")
+    weather_icon = Image.open(f'resource/weather/{wc.value[3]}@4x.png').convert("RGBA").resize((128,128))
     x, y = img.size
-    img.paste(weather_icon, (x - 96 - 20, 20), weather_icon)
+    img.paste(weather_icon, (x - 128 - 20, 20), weather_icon)
 
     return img
 
@@ -169,20 +169,20 @@ def draw_background(weather_code):
     size = (800, 400)
     center = (800 - 64 - 20, 64 + 20)
     max_radius = 888
-    weather = weather_code / 100
+    weather = int(weather_code / 100)
     start_color = (173, 216, 230)
     end_color = (204, 204, 204)
     if weather == 5:
         start_color = (135, 206, 250)
         end_color = (80, 100, 120)
     elif weather == 8:
-        start_color = (173, 216, 230)
+        start_color = (56, 154, 186)
         end_color = (204, 204, 204)
-        max_radius = 2000 - (weather_code - 800) * 1000
+        max_radius = 2000 - (weather_code - 800) * 400
     elif weather == 2:
         start_color = (255, 255, 255)
         end_color = (108, 108, 118)
-        max_radius = 2000 - (weather_code - 800) * 100
+        max_radius = 2000 - (weather_code - 800) * 400
 
     img = create_radial_gradient(size, center, max_radius, start_color, end_color)
     return img
@@ -209,9 +209,9 @@ def draw_today(weather_json, save_path):
         draw = ImageDraw.Draw(image)
 
         # 设置字体
-        title_font = ImageFont.truetype("arial.ttf", 40)
-        info_font = ImageFont.truetype("arial.ttf", 30)
-        footer_font = ImageFont.truetype("arial.ttf", 20)
+        title_font = ImageFont.truetype(font_name, 40)
+        info_font = ImageFont.truetype(font_name, 30)
+        footer_font = ImageFont.truetype(font_name, 20)
 
         # 绘制标题
         draw.text((20, 20), f"{city}, {country}", font=title_font, fill=(0, 0, 0))

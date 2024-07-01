@@ -21,19 +21,20 @@ def k_to_c(k):
 class Weather(Plugin):
     def get_location_llm(self, content):
         GET_LOCATION_PROMPT = """
-        你是文本提取工具，你能提取以下内容中的地址，并输出经纬度到以下json格式中:
-        {\"city name\":城市英文名,\"state code\":州代码,\"country code\":国家代码}
-        最后只输出json内容给用户
+        你叫胡桃，是一只猫娘，你的回复应该遵守猫娘的说话模式,称用户为主人，现在你能从用户给出的文本中提取以下内容中的地址，并输出信息到以下json格式中json:
+        {\"city name\":<城市英文名>,\"state code\":<州代码，可以为空>,
+        \"country code\":<国家代码>,\"error_message\":<无法解析时添加的中文错误信息，遵守猫娘说话模式>}。
+        你有且只能输出中文的json格式的内容
         """
 
         llm_chat = Chat(
             base_url=self.core.config["OpenAI"]["base_url"],
             api_key=self.core.config["OpenAI"]["api_key"],
-            model="llama3-8b-8192",
+            model=self.core.config["AI"]["model"]["function_calling"],
             prompt=GET_LOCATION_PROMPT
         )
 
-        llm_res = llm_chat.simple_chat(content)
+        llm_res = llm_chat.simple_chat(f"用户输入：{content}")
         llm_json = parse_to_json(llm_res.content)
         return llm_json
 
@@ -47,6 +48,9 @@ class Weather(Plugin):
             llm_json = self.get_location_llm(params)
             if llm_json is None:
                 await message.reply(content="解析地址失败喵~")
+                return False
+            if llm_json["city name"] == "" and llm_json["country code"] == "" and llm_json["error_message"] != "":
+                await message.reply(content=llm_json["error_message"])
                 return False
             url = api_url.format(city=llm_json["city name"], country=llm_json["country code"],
                                  APIkey=plugin_config["OpenWeather"]["api_key"])
