@@ -4,6 +4,7 @@ import random
 from enum import Enum
 from PIL import Image, ImageDraw, ImageFont
 import json
+from bot.core import BotCore
 
 # 给定的天气信息 JSON
 example_weather_json = '''

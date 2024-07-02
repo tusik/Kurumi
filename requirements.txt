@@ -1,3 +1,5 @@
 qq-botpy
 langchain
 langchain-openai
+matplotlib
+pillow

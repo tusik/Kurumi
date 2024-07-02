@@ -6,6 +6,7 @@ from botpy.message import Message
 import plugins.dnd
 import plugins.manager
 import plugins.weather
+import plugins.latex
 from plugins import *
 from plugins import plugin
 from bot.core import BotCore
@@ -17,12 +18,14 @@ bot_core = BotCore()
 
 def plugin_register(api: BotAPI):
     # 暂时先手动注册插件子类
-    dnd = plugins.dnd.DND(bot_core,api=api)
-    manager = plugins.manager.Manager(bot_core,api=api)
-    weather = plugins.weather.Weather(bot_core,api=api)
+    dnd = plugins.dnd.DND(bot_core, api=api)
+    manager = plugins.manager.Manager(bot_core, api=api)
+    weather = plugins.weather.Weather(bot_core, api=api)
+    latex = plugins.latex.Latex(bot_core,api=api)
     bot_core.plugin_objects["dnd"] = dnd
     bot_core.plugin_objects["manager"] = manager
     bot_core.plugin_objects["weather"] = weather
+    bot_core.plugin_objects["latex"] = latex
 
 
 class Kurumi(botpy.Client):
@@ -33,6 +36,10 @@ class Kurumi(botpy.Client):
     def set_config(self, config):
         self.config = config
         bot_core.config = config
+
+    def set_script_path(self, path):
+        bot_core.script_path = path
+
     async def help(self, message: Message):
         content = "以下是现在支持的命令：\n"
         for name, plugin_object in bot_core.plugin_objects.items():
@@ -58,5 +65,5 @@ class Kurumi(botpy.Client):
                             await command_func["function"](plugin_object, message=message, params=params)
 
                     if command_found is False and "main" in plugin_object.handlers:
-                        await plugin_object.handlers["main"]["function"](plugin_object, message=message, params=command_params)
-
+                        await plugin_object.handlers["main"]["function"](plugin_object, message=message,
+                                                                         params=command_params)
