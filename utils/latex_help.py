@@ -8,13 +8,15 @@ import matplotlib.image as mpimg
 
 out_path = "."
 
+
 def latex_to_image(latex_code, out_path):
+    plt.rcParams['text.usetex'] = True
     # 创建一个图形对象
     fig = plt.figure(figsize=(2, 2))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.axis('off')  # 关闭坐标轴
     rand_id = random.Random().randint(1, 1000)
-    latex_code = latex_code.replace('\n','')
+    latex_code = latex_code.replace('\n', '')
     # 渲染LaTeX公式
     t = ax.text(0.5, 0.5, f"${latex_code}$", fontsize=20, ha='center', va='center')
 
@@ -22,6 +24,7 @@ def latex_to_image(latex_code, out_path):
     fig.savefig(f'{out_path}/{rand_id}_latex.png', bbox_inches='tight', pad_inches=0)
     plt.close(fig)
     return f'{out_path}/{rand_id}_latex.png'
+
 
 if __name__ == '__main__':
     # 示例LaTeX公式
