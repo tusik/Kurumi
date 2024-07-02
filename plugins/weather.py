@@ -56,7 +56,7 @@ class Weather(Plugin):
                                  APIkey=plugin_config["OpenWeather"]["api_key"])
 
             response = requests.get(url)
-            image = draw_today(response.text, plugin_config["cache_path"])
+            image = draw_today(response.text, self.core.config["cache_path"])
             if image is None:
                 await self.api.post_message(channel_id=message.channel_id, msg_id=message.id, content="绘制图形失败喵~")
             else:
