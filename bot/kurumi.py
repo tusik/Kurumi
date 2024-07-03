@@ -7,6 +7,7 @@ import plugins.dnd
 import plugins.manager
 import plugins.weather
 import plugins.latex
+import plugins.chat
 from plugins import *
 from plugins import plugin
 from bot.core import BotCore
@@ -21,11 +22,13 @@ def plugin_register(api: BotAPI):
     dnd = plugins.dnd.DND(bot_core, api=api)
     manager = plugins.manager.Manager(bot_core, api=api)
     weather = plugins.weather.Weather(bot_core, api=api)
-    latex = plugins.latex.Latex(bot_core,api=api)
+    latex = plugins.latex.Latex(bot_core, api=api)
+    chat = plugins.chat.Chat(bot_core, api=api)
     bot_core.plugin_objects["dnd"] = dnd
     bot_core.plugin_objects["manager"] = manager
     bot_core.plugin_objects["weather"] = weather
     bot_core.plugin_objects["latex"] = latex
+    bot_core.plugin_objects["main"] = chat
 
 
 class Kurumi(botpy.Client):
@@ -63,7 +66,14 @@ class Kurumi(botpy.Client):
                             command_found = True
                             params = message.content.split(command_name)[1].strip()
                             await command_func["function"](plugin_object, message=message, params=params)
-
+                            return
                     if command_found is False and "main" in plugin_object.handlers:
                         await plugin_object.handlers["main"]["function"](plugin_object, message=message,
                                                                          params=command_params)
+                        return
+            if "main" in bot_core.plugin_objects:
+                command_params = message.content.split("> ")[1].strip()
+                main_object = bot_core.plugin_objects["main"]
+                await main_object.handlers["main"]["function"](main_object,
+                                                               message=message,
+                                                               params=command_params)

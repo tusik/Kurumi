@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 
 
-class Chat:
+class ChatTool:
     def __init__(self, prompt=None, base_url=None, api_key = None, model=None, user_content=None):
         self.prompt = prompt
         self.base_url = base_url

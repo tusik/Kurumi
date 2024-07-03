@@ -1,12 +1,12 @@
-from plugins.plugin import Plugin
+from plugins.plugin import Plugin, KurumiPlugin
 from botpy.message import Message
 
 
+@KurumiPlugin(name="manager", route="plugin")
 class Manager(Plugin):
-    name = "manager"
 
     def register_commands(self):
-        @self.cmd("/plugin", "插件功能")
+        @self.cmd("main", "插件功能")
         async def plugin(self, message: Message, params=None):
             if params == "help":
                 content = "以下是plugin命令可用的参数：\n"
@@ -20,7 +20,8 @@ class Manager(Plugin):
                     return False
                 plugin_name = texts[1]
                 if plugin_name in self.core.plugin_objects:
-                    self.core.plugin_objects[plugin_name] = self.core.plugin_objects[plugin_name].__class__(self.core,api=self.api)
+                    self.core.plugin_objects[plugin_name] = self.core.plugin_objects[plugin_name].__class__(self.core,
+                                                                                                            api=self.api)
                     await message.reply(content=f"插件[{plugin_name}]重载成功喵~")
                 else:
                     await message.reply(content=f"插件[{plugin_name}]不存在")

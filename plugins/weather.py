@@ -1,7 +1,7 @@
 import time
 import requests
 from plugins.plugin import Plugin, KurumiPlugin
-from llm.chat import Chat
+from llm.chat_tool import ChatTool
 from llm.function_calling import *
 from botpy.types.message import Embed, EmbedField
 from utils.weather_help import draw_today
@@ -27,7 +27,7 @@ class Weather(Plugin):
         你有且只能输出中文的json格式的内容
         """
 
-        llm_chat = Chat(
+        llm_chat = ChatTool(
             base_url=self.core.config["OpenAI"]["base_url"],
             api_key=self.core.config["OpenAI"]["api_key"],
             model=self.core.config["AI"]["model"]["function_calling"],
