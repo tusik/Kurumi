@@ -6,6 +6,7 @@ from botpy import logging, BotAPI
 from botpy.ext.command_util import Commands
 from botpy.message import BaseMessage
 
+from bot.message import KurumiMessage, MessageType
 from plugins import *
 
 
@@ -55,3 +56,22 @@ class Plugin:
             desc = handler["description"]
             content = content + f"{alias}: {desc} \n"
         return content
+
+    async def reply(self, msg: KurumiMessage):
+        if msg.message_type == MessageType.Channel:
+
+            await self.api.post_message(channel_id=msg.channel_id, msg_id=msg.message_id, content=msg.content,
+                                        file_image=msg.file)
+        elif msg.message_type == MessageType.Group:
+            upload_media = None
+            msg_type = 0
+            if msg.file is not None:
+                upload_media = await self.api.post_group_file(
+                    group_openid=msg.group_id,
+                    file_type=1,  # 文件类型要对应上，具体支持的类型见方法说明
+                    url=msg.file  # 文件Url
+                )
+                msg_type = 7
+            await self.api.post_group_message(group_openid=msg.group_id, msg_type=msg_type, msg_id=msg.message_id,
+                                              content=msg.content,
+                                              media=upload_media)
