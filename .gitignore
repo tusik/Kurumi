@@ -2,3 +2,5 @@
 config.yaml
 *.log
 venv/
+.idea/
+.log
