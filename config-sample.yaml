@@ -1,2 +1,18 @@
-appid: "config-sample.yaml"
+appid: "123"
 secret: "xxxx"
+
+plugins:
+  weather:
+    cache_path: "cache"
+    OpenWeather:
+      api_key: "xxx"
+
+
+OpenAI:
+  api_key: "sk-xxx"
+  base_url: "https://xxx.xx/v1"
+
+AI:
+  model:
+    chat: "gpt-3.5-turbo"
+    function_calling: "llama3-8b-8192"

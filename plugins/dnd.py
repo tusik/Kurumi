@@ -2,7 +2,7 @@ from botpy.message import Message
 
 from plugins.plugin import Plugin, KurumiPlugin
 
-@KurumiPlugin(name="DND")
+@KurumiPlugin(name="DND",route="dnd")
 class DND(Plugin):
     def register_commands(self):
         @self.cmd("dnd", "这是一个DND游戏的插件")
