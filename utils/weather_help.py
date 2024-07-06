@@ -56,7 +56,7 @@ example_weather_json = '''
 }
 '''
 
-font_name = r"SourceHanSans-VF.ttf.ttc"
+font_name = r"Apple Braille.ttf"
 class WeatherCondition(Enum):
     THUNDERSTORM_WITH_LIGHT_RAIN = (200, "雷暴", "雷暴伴有小雨", "11d")
     THUNDERSTORM_WITH_RAIN = (201, "雷暴", "雷暴伴有雨", "11d")

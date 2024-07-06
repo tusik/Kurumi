@@ -68,7 +68,7 @@ class Kurumi(botpy.Client):
         if '/help' in message.content:
             await self.help_in_group(message)
         else:
-            msg = KurumiMessage.create_group_message(message.id, message.group_openid)
+            msg = KurumiMessage.create(group_msg=message)
             for name, plugin_object in bot_core.plugin_objects.items():
                 command_root = getattr(plugin_object, 'route', None)
                 if command_root is not None and f"/{command_root}" in message.content:
@@ -93,15 +93,16 @@ class Kurumi(botpy.Client):
                                                                params=message.content)
 
     async def on_at_message_create(self, message: Message):
-        if bot_core.me["group"] is None:
-            bot_core.me["group"] = await self.api.me()
+        if bot_core.me["channel"] is None:
+            bot_core.me["channel"] = await self.api.me()
+        msg = KurumiMessage.create(channel_msg=message)
 
+        bot_id = bot_core.me["channel"]["id"]
         if '/help' in message.content:
             await self.help(message)
         else:
             for name, plugin_object in bot_core.plugin_objects.items():
                 command_root = getattr(plugin_object, 'route', None)
-                bot_id = bot_core.id["id"]
                 if command_root is not None and f"<@!{bot_id}> /" + command_root in message.content:
                     command_params = message.content.split(command_root)[1].strip()
                     sub_command = command_params.split(" ")[0].strip()
@@ -111,15 +112,15 @@ class Kurumi(botpy.Client):
                         if command_name == sub_command:
                             command_found = True
                             params = message.content.split(command_name)[1].strip()
-                            await command_func["function"](plugin_object, message=message, params=params)
+                            await command_func["function"](plugin_object, message=msg, params=params)
                             return
                     if command_found is False and "main" in plugin_object.handlers:
-                        await plugin_object.handlers["main"]["function"](plugin_object, message=message,
+                        await plugin_object.handlers["main"]["function"](plugin_object, message=msg,
                                                                          params=command_params)
                         return
             if "main" in bot_core.plugin_objects:
-                command_params = message.content.split("> ")[1].strip()
+                command_params = message.content.split(f"<@!{bot_id}> ")[1].strip()
                 main_object = bot_core.plugin_objects["main"]
                 await main_object.handlers["main"]["function"](main_object,
-                                                               message=message,
+                                                               message=msg,
                                                                params=command_params)

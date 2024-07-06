@@ -1,5 +1,6 @@
 from langchain_core.messages import SystemMessage, HumanMessage
 
+from bot.message import KurumiMessage, MessageType
 from llm.chat_tool import ChatTool
 from plugins.plugin import Plugin, KurumiPlugin
 
@@ -38,9 +39,11 @@ class Chat(Plugin):
 
     def register_commands(self):
         @self.cmd("main", "直接聊天")
-        async def main_chat(self, message, params=None):
-            user_name = message.author.username
-            messages = self.build_context(message.channel_id, f"主人{user_name}说:{params}")
-            llm_res = self.do_chat(messages)
-            messages.append(llm_res)
-            await message.reply(content=llm_res.content)
+        async def main_chat(self, message: KurumiMessage, params=None):
+            if message.message_type == MessageType.Channel:
+                user_name = message.author.username
+                messages = self.build_context(message.channel_id, f"主人{user_name}说:{params}")
+                llm_res = self.do_chat(messages)
+                messages.append(llm_res)
+                message.content = llm_res.content
+                await self.reply(message)

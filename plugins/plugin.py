@@ -66,12 +66,12 @@ class Plugin:
             upload_media = None
             msg_type = 0
             if msg.file is not None:
+                # TODO FIX: 群api不能直接读取本地文件后发送图片
                 upload_media = await self.api.post_group_file(
                     group_openid=msg.group_id,
-                    file_type=1,  # 文件类型要对应上，具体支持的类型见方法说明
-                    url=msg.file  # 文件Url
+                    file_type=1,
+                    url=msg.file
                 )
                 msg_type = 7
             await self.api.post_group_message(group_openid=msg.group_id, msg_type=msg_type, msg_id=msg.message_id,
-                                              content=msg.content,
                                               media=upload_media)

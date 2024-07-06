@@ -1,5 +1,8 @@
+import os
 import time
 import requests
+
+from bot.message import KurumiMessage
 from plugins.plugin import Plugin, KurumiPlugin
 from llm.chat_tool import ChatTool
 from llm.function_calling import *
@@ -40,17 +43,20 @@ class Weather(Plugin):
 
     def register_commands(self):
         @self.cmd("main", "获取天气信息")
-        async def weather(self, message, params=None):
+        async def weather(self, message: KurumiMessage, params=None):
             plugin_config = self.core.config["plugins"]["weather"]
             if params is None:
-                await message.reply(content="你还没告诉我哪里喵~")
+                message.content = "你还没告诉我哪里喵~"
+                await self.reply(message)
                 return False
             llm_json = self.get_location_llm(params)
             if llm_json is None:
-                await message.reply(content="解析地址失败喵~")
+                message.content = "解析地址失败喵~"
+                await self.reply(message)
                 return False
             if llm_json["city name"] == "" and llm_json["country code"] == "" and llm_json["error_message"] != "":
-                await message.reply(content=llm_json["error_message"])
+                message.content = llm_json["error_message"]
+                await self.reply(message)
                 return False
             url = api_url.format(city=llm_json["city name"], country=llm_json["country code"],
                                  APIkey=plugin_config["OpenWeather"]["api_key"])
@@ -58,7 +64,9 @@ class Weather(Plugin):
             response = requests.get(url)
             image = draw_today(response.text, self.core.config["cache_path"])
             if image is None:
-                await self.api.post_message(channel_id=message.channel_id, msg_id=message.id, content="绘制图形失败喵~")
+                message.content = "绘制图形失败喵~"
+                await self.reply(message)
             else:
-                await self.api.post_message(channel_id=message.channel_id, msg_id=message.id, file_image=image)
+                message.set_image(os.path.abspath(image))
+                await self.reply(message)
             return True
