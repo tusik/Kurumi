@@ -32,7 +32,7 @@ def load_plugins(api):
     plugins_dir = "plugins"
     for root, _, files in os.walk(plugins_dir):  # 使用os.walk遍历所有子目录
         for file in files:
-            if file.endswith(".py") and not file.startswith("_"):  # 查找.py文件，排除__init__.py
+            if file.endswith(".py") and not file.startswith("_") and not file == "plugin":  # 查找.py文件，排除__init__.py
                 plugin_path = os.path.join(root, file)
                 plugin_name = os.path.splitext(file)[0]  # 获取文件名作为插件名
 
@@ -46,32 +46,17 @@ def load_plugins(api):
                         attr = getattr(plugin_module, attr_name)
                         if isinstance(attr, type) and issubclass(attr, Plugin) and attr != Plugin:
                             plugin_instance = attr(bot_core, api)
-                            bot_core.plugin_objects[plugin_instance.route]=plugin_instance
+                            bot_core.plugin_objects[plugin_instance.route] = plugin_instance
                             print(f"插件名称: {plugin_instance.name}")
                             print(f"插件路由: {plugin_instance.route}")
                 except Exception as e:
                     print(f"加载插件 {plugin_name} 时出错: {e}")
 
 
-# def plugin_register(api: BotAPI):
-#     # 暂时先手动注册插件子类
-#     dnd = plugins.dnd.DND(bot_core, api=api)
-#     manager = plugins.manager.Manager(bot_core, api=api)
-#     weather = plugins.weather.Weather(bot_core, api=api)
-#     latex = plugins.latex.Latex(bot_core, api=api)
-#     chat = plugins.chat.Chat(bot_core, api=api)
-#     bot_core.plugin_objects["dnd"] = dnd
-#     bot_core.plugin_objects["manager"] = manager
-#     bot_core.plugin_objects["weather"] = weather
-#     bot_core.plugin_objects["latex"] = latex
-#     bot_core.plugin_objects["main"] = chat
-
-
 class Kurumi(botpy.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         load_plugins(self.api)
-        #plugin_register(self.api)
 
     def set_config(self, config):
         self.config = config
