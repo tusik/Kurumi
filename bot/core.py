@@ -3,8 +3,9 @@ class BotCore:
     config = None
     script_path = None
     me = {
-        "channel":None,
-        "group":None
+        "channel": None,
+        "group": None
     }
+
     def __init__(self):
         pass

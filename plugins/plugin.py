@@ -1,13 +1,6 @@
 import os
-from functools import wraps
-from typing import List, Callable, Any
-from botpy import logging, BotAPI
-
-from botpy.ext.command_util import Commands
-from botpy.message import BaseMessage
 
 from bot.message import KurumiMessage, MessageType
-from plugins import *
 
 
 def KurumiPlugin(name=None, route=None):
@@ -18,6 +11,11 @@ def KurumiPlugin(name=None, route=None):
         return cls
 
     return decorator
+
+
+def get_bot_core():
+    from bot.kurumi import bot_core
+    return bot_core
 
 
 class Plugin:
@@ -66,11 +64,14 @@ class Plugin:
             upload_media = None
             msg_type = 0
             if msg.file is not None:
-                # TODO FIX: 群api不能直接读取本地文件后发送图片
+                # 群只能从url读取图片
+                filename = os.path.basename(msg.file)
+                bot_core = get_bot_core()
+                url = bot_core.config["group_url"]
                 upload_media = await self.api.post_group_file(
                     group_openid=msg.group_id,
                     file_type=1,
-                    url=msg.file
+                    url=f"{url}/{filename}"
                 )
                 msg_type = 7
             await self.api.post_group_message(group_openid=msg.group_id, msg_type=msg_type, msg_id=msg.message_id,
