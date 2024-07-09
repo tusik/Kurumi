@@ -12,7 +12,7 @@ from plugins import *
 
 def KurumiPlugin(name=None, route=None):
     def decorator(cls):
-        print(f"注册新的插件: {cls.__name__}")
+        print(f"注入新的插件: {cls.__name__}")
         cls.name = name if name else cls.__name__
         cls.route = route
         return cls

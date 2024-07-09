@@ -3,7 +3,7 @@ from plugins.plugin import Plugin, KurumiPlugin
 from botpy.message import Message
 
 
-@KurumiPlugin(name="manager", route="plugin")
+@KurumiPlugin(name="manager", route="系统")
 class Manager(Plugin):
 
     def register_commands(self):

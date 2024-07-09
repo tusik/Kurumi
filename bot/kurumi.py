@@ -3,39 +3,60 @@ import botpy
 from botpy import logging, BotAPI
 from botpy.message import Message, GroupMessage
 
-import plugins.dnd
-import plugins.manager
-import plugins.weather
-import plugins.latex
-import plugins.chat
+# import plugins.dnd
+# import plugins.manager
+# import plugins.weather
+# import plugins.latex
+# import plugins.chat
 from bot.message import KurumiMessage
 from plugins import *
 from plugins import plugin
 from bot.core import BotCore
+from plugins.plugin import Plugin
 
 _log = logging.get_logger()
 
 bot_core = BotCore()
 
+import os
+import importlib.util
 
-def plugin_register(api: BotAPI):
-    # 暂时先手动注册插件子类
-    dnd = plugins.dnd.DND(bot_core, api=api)
-    manager = plugins.manager.Manager(bot_core, api=api)
-    weather = plugins.weather.Weather(bot_core, api=api)
-    latex = plugins.latex.Latex(bot_core, api=api)
-    chat = plugins.chat.Chat(bot_core, api=api)
-    bot_core.plugin_objects["dnd"] = dnd
-    bot_core.plugin_objects["manager"] = manager
-    bot_core.plugin_objects["weather"] = weather
-    bot_core.plugin_objects["latex"] = latex
-    bot_core.plugin_objects["main"] = chat
+
+def load_plugins(api):
+    """
+  加载 plugins 文件夹下的所有插件。
+
+  Args:
+    kurumi: Kurumi 系统对象。
+  """
+    plugins_dir = "plugins"
+    for root, _, files in os.walk(plugins_dir):  # 使用os.walk遍历所有子目录
+        for file in files:
+            if file.endswith(".py") and not file.startswith("_") and not file == "plugin":  # 查找.py文件，排除__init__.py
+                plugin_path = os.path.join(root, file)
+                plugin_name = os.path.splitext(file)[0]  # 获取文件名作为插件名
+
+                # 动态导入模块
+                try:
+                    spec = importlib.util.spec_from_file_location(plugin_name, plugin_path)
+                    plugin_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(plugin_module)
+
+                    for attr_name in dir(plugin_module):
+                        attr = getattr(plugin_module, attr_name)
+                        if isinstance(attr, type) and issubclass(attr, Plugin) and attr != Plugin:
+                            plugin_instance = attr(bot_core, api)
+                            bot_core.plugin_objects[plugin_instance.route] = plugin_instance
+                            print(f"插件名称: {plugin_instance.name}")
+                            print(f"插件路由: {plugin_instance.route}")
+                except Exception as e:
+                    print(f"加载插件 {plugin_name} 时出错: {e}")
 
 
 class Kurumi(botpy.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        plugin_register(self.api)
+        load_plugins(self.api)
 
     def set_config(self, config):
         self.config = config

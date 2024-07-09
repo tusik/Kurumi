@@ -20,7 +20,7 @@ def k_to_c(k):
     return round(k - 273.15, 1)
 
 
-@KurumiPlugin(name="Weather", route="weather")
+@KurumiPlugin(name="Weather", route="天气")
 class Weather(Plugin):
     def get_location_llm(self, content):
         GET_LOCATION_PROMPT = """
