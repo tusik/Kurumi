@@ -29,3 +29,14 @@
 
 - [ ] 数据库功能
   - [ ] 用户信息储存
+
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Recent activity [![Time period](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_badge.svg)](https://repography.com)
+[![Timeline graph](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_timeline.svg)](https://github.com/tusik/Kurumi/commits)
+[![Issue status graph](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_issues.svg)](https://github.com/tusik/Kurumi/issues)
+[![Pull request status graph](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_prs.svg)](https://github.com/tusik/Kurumi/pulls)
+[![Trending topics](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_words.svg)](https://github.com/tusik/Kurumi/commits)
+[![Top contributors](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_users.svg)](https://github.com/tusik/Kurumi/graphs/contributors)
+[![Activity map](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_map.svg)](https://github.com/tusik/Kurumi/commits)
+
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Structure
+[![Structure](https://images.repography.com/52368286/tusik/Kurumi/structure/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/ocYNrKYWjN8AC8kE_dYT553R9KOOw0Rm1gVcatcwnPs_table.svg)](https://github.com/tusik/Kurumi)
