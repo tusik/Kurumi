@@ -20,21 +20,28 @@ class ChatTool:
         self.api_key = api_key
         self.model = model
         self.messages = []
+        self.summary_context = None
 
-    def build_context(self, prompt=None):
-        system_msg = SystemMessage(content=self.prompt)
-        if prompt is not None:
-            system_msg = SystemMessage(content=prompt)
-        return [system_msg] + self.messages
+    def build_context(self, prompt=""):
+        msg_list = []
+        temp_prompt = ""
+        if prompt != "":
+            temp_prompt = prompt
+        else:
+            temp_prompt = self.prompt
+        if self.summary_context is not None:
+            temp_prompt = (temp_prompt +
+                           f"。以下内容是用户与你之前对话的总结内容\n**历史对话总结**{self.summary_context}**历史对话总结结束**")
+
+        msg_list.append(SystemMessage(content=temp_prompt))
+        msg_list.extend(self.messages)
+        return msg_list
 
     def append(self, msg):
         self.messages.append(msg)
 
     def append_human(self, content):
-        if isinstance(self.messages[-1], SystemMessage) or isinstance(self.messages[-1], AIMessage):
-            self.messages.append(HumanMessage(content=content))
-        else:
-            raise ValueError("The last message must be a SystemMessage or AIMessage to append a HumanMessage.")
+        self.messages.append(HumanMessage(content=content))
 
     def append_assistant(self, content):
         if isinstance(self.messages[-1], HumanMessage):
@@ -53,16 +60,29 @@ class ChatTool:
         llm_resp = llm.invoke(self.build_context())
         return llm_resp
 
-    def invoke(self, messages):
+    def invoke(self, messages=None):
         llm = ChatOpenAI(
             base_url=self.base_url,
             api_key=self.api_key,
             model=self.model,
         )
-        return llm.invoke(messages)
+        if messages is None:
+            return llm.invoke(self.build_context())
+        else:
+            return llm.invoke(messages)
 
     def count_token(self):
         return count_token(self.messages)
 
     def summary(self, messages):
-        prompt = "请总结以下对话的主要内容和结论，确保涵盖所有关键信息。"
+        message_list = messages
+        if messages is None:
+            prompt = "请总结以下对话的主要内容和结论，确保涵盖所有关键信息。"
+            message_list = self.build_context(prompt)
+        message_list.append(
+            HumanMessage(content="总结以上内容。")
+        )
+        res = self.invoke(message_list)
+        self.messages = []
+        self.summary_context = res.content
+

@@ -47,3 +47,19 @@ class Chat(Plugin):
                 messages.append(llm_res)
                 message.content = llm_res.content
                 await self.reply(message)
+            elif message.message_type == MessageType.Group:
+                if message.group_id not in self.message_cache:
+                    chat_history = ChatTool(
+                        base_url=self.core.config["OpenAI"]["base_url"],
+                        api_key=self.core.config["OpenAI"]["api_key"],
+                        model=self.core.config["AI"]["model"]["chat"],
+                        prompt=self.system_prompt
+                    )
+                    self.message_cache[message.group_id] = chat_history
+                chat_history = self.message_cache[message.group_id]
+                user_id = message.author.member_openid
+                chat_history.append_human(content=f"主人{user_id}说:{params}")
+                res = chat_history.invoke()
+                chat_history.append(res)
+                message.content = res.content
+                await self.reply(message)

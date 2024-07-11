@@ -74,5 +74,8 @@ class Plugin:
                     url=f"{url}/{filename}"
                 )
                 msg_type = 7
-            await self.api.post_group_message(group_openid=msg.group_id, msg_type=msg_type, msg_id=msg.message_id,
+            await self.api.post_group_message(group_openid=msg.group_id,
+                                              msg_type=msg_type,
+                                              msg_id=msg.message_id,
+                                              content=msg.content,
                                               media=upload_media)
