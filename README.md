@@ -5,27 +5,28 @@
         <img alt="Tests Passing" src="https://img.shields.io/github/license/tusik/kurumi" />
       </a>
     </p>
+    <a href="plugins">插件开发</a>
     <h3 align="center">QQ频道/群结合LLM的智能Agent</h3>
   </p>
 </div>
 
-此项目目标是以qq为平台结合LLM开发一个智能体机器人，目前没有QQ群权限，只能以qq频道为前期目标。
+此项目目标是以qq为平台结合LLM开发一个智能体机器人，统一频道与群的开发，只能以qq频道为前期目标。
 
 ## Road map
 - [ ] 插件系统 WIP
-  - [ ] 插件注册装饰器 WIP
+  - [x] 插件注册装饰器
   - [x] 插件命令注册装饰器
-  - [ ] 动态插件载入功能
+  - [x] 动态插件载入功能
 
 - [ ] 插件 WIP
   - [x] 插件管理插件 
-  - [ ] 天气插件 WIP
+  - [x] 天气插件
   - [ ] 签到插件
 
 - [ ] LLM WIP
-  - [ ] OpenAI接入 WIP
-  - [ ] 通用Function calling实现
-  - [ ] OpenAI API兼容接入
+  - [x] OpenAI接入
+  - [ ] 通用Function calling实现 WIP
+  - [ ] OpenAI API兼容接入 WIP
 
 - [ ] 数据库功能
   - [ ] 用户信息储存
