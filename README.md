@@ -21,6 +21,7 @@
 - [ ] 插件 WIP
   - [x] 插件管理插件 
   - [x] 天气插件
+  - [ ] 基础入口，聊天插件 WIP
   - [ ] 签到插件
 
 - [ ] LLM WIP
@@ -29,7 +30,7 @@
   - [ ] OpenAI API兼容接入 WIP
 
 - [ ] 数据库功能
-  - [ ] 用户信息储存
+  - [ ] 用户信息储存 WIP
 
 ## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Recent activity [![Time period](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_badge.svg)](https://repography.com)
 [![Timeline graph](https://images.repography.com/52368286/tusik/Kurumi/recent-activity/YEAc4a5LJqlumSFBKcU8pTGq2DNxPbaHrgODWKgqSro/RvP5bd2_SJKrhRO8c_8VHwGo0cEnaFqnnHP-RwBWgng_timeline.svg)](https://github.com/tusik/Kurumi/commits)
