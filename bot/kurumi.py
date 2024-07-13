@@ -3,11 +3,7 @@ import botpy
 from botpy import logging, BotAPI
 from botpy.message import Message, GroupMessage
 
-# import plugins.dnd
-# import plugins.manager
-# import plugins.weather
-# import plugins.latex
-# import plugins.chat
+
 from bot.message import KurumiMessage
 from plugins import *
 from plugins import plugin
