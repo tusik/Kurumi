@@ -1,13 +1,15 @@
 import os
-
+import uuid
 from bot.message import KurumiMessage, MessageType
 
 
-def KurumiPlugin(name=None, route=None):
+def KurumiPlugin(name=None, route=None, description=None, ai_compatible=False):
     def decorator(cls):
         print(f"注入新的插件: {cls.__name__}")
         cls.name = name if name else cls.__name__
         cls.route = route
+        cls.ai_compatible = ai_compatible
+        cls.description=description
         return cls
 
     return decorator
@@ -19,15 +21,20 @@ def get_bot_core():
 
 
 class Plugin:
-    def __init__(self, core, api=None, name=None, route=None):
+    def __init__(self, core, api=None, name=None, route=None, description=None, ai_compatible=None):
         self.api = api
         if name is not None:
             self.name = name
         self.core = core
         if route is not None:
             self.route = route
+        if ai_compatible is not None:
+            self.ai_compatible = ai_compatible
+        if description is not None:
+            self.description = description
         self.handlers = {}
         self.register_commands()
+        self.id = uuid.uuid4().hex
 
     def __del__(self):
         print(f"卸载插件: {self.name}")

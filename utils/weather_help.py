@@ -1,6 +1,7 @@
 import io
 import math
 import random
+import sys
 from enum import Enum
 from PIL import Image, ImageDraw, ImageFont
 import json
@@ -57,6 +58,11 @@ example_weather_json = '''
 '''
 
 font_name = r"SourceHanSans-VF.ttf.ttc"
+platform = sys.platform
+if platform == 'darwin':
+    font_name = "STHeiti Medium.ttc"
+
+
 class WeatherCondition(Enum):
     THUNDERSTORM_WITH_LIGHT_RAIN = (200, "雷暴", "雷暴伴有小雨", "11d")
     THUNDERSTORM_WITH_RAIN = (201, "雷暴", "雷暴伴有雨", "11d")
@@ -152,14 +158,14 @@ def create_radial_gradient(size, center, max_radius, start_color, end_color):
             r = int(r1 + ratio * (r2 - r1))
             g = int(g1 + ratio * (g2 - g1))
             b = int(b1 + ratio * (b2 - b1))
-            draw.point((x, y), (r, g, b,255))
+            draw.point((x, y), (r, g, b, 255))
 
     return img
 
 
 def draw_weather_icon(weather_code, img):
     wc = WeatherCondition.get_by_code(weather_code)
-    weather_icon = Image.open(f'resource/weather/{wc.value[3]}@4x.png').convert("RGBA").resize((128,128))
+    weather_icon = Image.open(f'resource/weather/{wc.value[3]}@4x.png').convert("RGBA").resize((128, 128))
     x, y = img.size
     img.paste(weather_icon, (x - 128 - 20, 20), weather_icon)
 
@@ -215,7 +221,7 @@ def draw_today(weather_json, save_path):
         footer_font = ImageFont.truetype(font_name, 20)
 
         # 绘制标题
-        draw.text((20, 20), f"{city}, {country}", font=title_font, fill=(0, 0, 0))
+        draw.text((20, 20), f"{city}", font=title_font, fill=(0, 0, 0))
 
         # 绘制天气信息
         draw.text((20, 80), f"Weather: {weather_main} - {weather_description}", font=info_font, fill=(0, 0, 0))
