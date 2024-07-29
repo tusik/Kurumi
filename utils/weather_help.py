@@ -59,8 +59,10 @@ example_weather_json = '''
 
 font_name = r"SourceHanSans-VF.ttf.ttc"
 platform = sys.platform
+resource_path = ""
 if platform == 'darwin':
     font_name = "STHeiti Medium.ttc"
+    resource_path = "../"
 
 
 class WeatherCondition(Enum):
@@ -165,7 +167,7 @@ def create_radial_gradient(size, center, max_radius, start_color, end_color):
 
 def draw_weather_icon(weather_code, img):
     wc = WeatherCondition.get_by_code(weather_code)
-    weather_icon = Image.open(f'resource/weather/{wc.value[3]}@4x.png').convert("RGBA").resize((128, 128))
+    weather_icon = Image.open(f'{resource_path}resource/weather/{wc.value[3]}@4x.png').convert("RGBA").resize((128, 128))
     x, y = img.size
     img.paste(weather_icon, (x - 128 - 20, 20), weather_icon)
 
@@ -195,6 +197,12 @@ def draw_background(weather_code):
     return img
 
 
+def text_bbox(draw, font, text):
+    bbox = draw.textbbox((0, 0), text, font=font)  # 获取文本的边界框
+    text_width = bbox[2] - bbox[0]
+    text_height = bbox[3] - bbox[1]
+    return text_width, text_height
+
 def draw_today(weather_json, save_path):
     # 解析 JSON 数据
     try:
@@ -207,6 +215,8 @@ def draw_today(weather_json, save_path):
         weather_code = data['weather'][0]["id"]
         weather_description = data['weather'][0]['description']
         temp = data['main']['temp'] - 273.15  # 转换为摄氏度
+        temp_max = data['main']['temp_max'] - 273.15  # 转换为摄氏度
+        temp_min = data['main']['temp_min'] - 273.15  # 转换为摄氏度
         humidity = data['main']['humidity']
 
         # 创建图像
@@ -225,8 +235,15 @@ def draw_today(weather_json, save_path):
 
         # 绘制天气信息
         draw.text((20, 80), f"Weather: {weather_main} - {weather_description}", font=info_font, fill=(0, 0, 0))
-        draw.text((20, 130), f"Temperature: {temp:.1f}°C", font=info_font, fill=(0, 0, 0))
-        draw.text((20, 180), f"Humidity: {humidity}%", font=info_font, fill=(0, 0, 0))
+        temp_box = text_bbox(draw, ImageFont.truetype(font_name, 100), f"{temp:.1f}")
+        draw.text((width - temp_box[0] - 148, 40), f"{temp:.1f}", font=ImageFont.truetype(font_name, 100),
+                  fill=(0, 0, 0))
+        temp_range = f"{temp_min:.1f}℃~{temp_max:.1f}℃"
+        temp_box = text_bbox(draw, ImageFont.truetype(font_name, 30), temp_range)
+        draw.text((width - temp_box[0] - 150, 140), temp_range, font=ImageFont.truetype(font_name, 30),
+                  fill=(0, 0, 0))
+
+        draw.text((20, 130), f"Humidity: {humidity}%", font=info_font, fill=(0, 0, 0))
 
         # 绘制右下角的文本
         footer_text = "@Kurumi"
@@ -248,4 +265,4 @@ def draw_today(weather_json, save_path):
 
 
 if __name__ == '__main__':
-    draw_today(example_weather_json, 'D:/cache/')
+    draw_today(example_weather_json, '../cache')

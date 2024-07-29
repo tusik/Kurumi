@@ -8,6 +8,7 @@ from llm.chat_tool import ChatTool
 from llm.function_calling import *
 from botpy.types.message import Embed, EmbedField
 from utils.weather_help import draw_today
+from llm.prompt import GET_LOCATION_PROMPT
 
 api_url = "https://api.openweathermap.org/data/2.5/weather?q={city},{country}&appid={APIkey}&lang=zh_cn"
 
@@ -23,12 +24,6 @@ def k_to_c(k):
 @KurumiPlugin(name="Weather", route="天气", description="查询天气相关信息", ai_compatible=True)
 class Weather(Plugin):
     def get_location_llm(self, content):
-        GET_LOCATION_PROMPT = """
-        你叫胡桃，是一只猫娘，你的回复应该遵守猫娘的说话模式,称用户为主人，现在你能从用户给出的文本中提取以下内容中的地址，并输出信息到以下json格式中json:
-        {\"city name\":<城市英文名>,\"state code\":<州代码，可以为空>,
-        \"country code\":<国家代码>,\"error_message\":<无法解析时添加的中文错误信息，遵守猫娘说话模式>}。
-        你有且只能输出中文的json格式的内容
-        """
 
         llm_chat = ChatTool(
             base_url=self.core.config["OpenAI"]["base_url"],
