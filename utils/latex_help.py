@@ -1,16 +1,53 @@
+'''
+Author: Image image@by.cx
+Date: 2024-08-28 11:06:46
+LastEditors: Image image@by.cx
+LastEditTime: 2024-08-28 11:08:16
+filePathColon: /
+Description: 
+
+Copyright (c) 2024 by Image, All Rights Reserved. 
+'''
 import random
 
 import matplotlib
-
+import matplotlib as mpl
+import re
 matplotlib.use('Agg')  # 确保在无图形界面环境下运行
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 out_path = "."
 
+# 定义检查和添加所需宏包的函数
+def add_required_packages(latex_str):
+    packages = set()
+    
+    # 检查是否使用了 aligned 环境
+    if r'\begin{aligned}' in latex_str:
+        packages.add(r'amsmath')
+    
+    # 检查是否使用了 bold math
+    if r'\mathbf{' in latex_str:
+        packages.add(r'amsfonts')
+    
+    # 检查是否使用了 \mathbb
+    if r'\mathbb{' in latex_str:
+        packages.add(r'amsfonts')
+    
+    # 检查是否使用了 \boldsymbol
+    if r'\boldsymbol{' in latex_str:
+        packages.add(r'amsmath')
+        
+    # 生成 preamble 字符串
+    preamble = r'\usepackage{' + '}\n\\usepackage{'.join(packages) + '}'
+    return preamble
 
 def latex_to_image(latex_code, out_path):
-    plt.rcParams['text.usetex'] = True
+    preamble = add_required_packages(latex_code)
+    mpl.rc('text', usetex=True)
+
+    mpl.rc('text.latex', preamble=preamble)
     # 创建一个图形对象
     fig = plt.figure(figsize=(2, 2))
     ax = fig.add_axes([0, 0, 1, 1])
