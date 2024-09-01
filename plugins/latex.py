@@ -12,5 +12,5 @@ class Latex(Plugin):
                 image = latex_to_image(params, self.core.config["cache_path"])
                 message.file = image
             except Exception as e:
-                message.content = f"转换失败喵：{e}"
+                message.content = f"转换失败喵~ 可能是因为公式错误或者不支持的package喵~"
             await self.reply(message)
