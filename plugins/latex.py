@@ -8,6 +8,9 @@ class Latex(Plugin):
     def register_commands(self):
         @self.cmd("main", "latex转图像")
         async def convert_to_img(self, message: KurumiMessage, params=None):
-            image = latex_to_image(params, self.core.config["cache_path"])
-            message.file = image
+            try:
+                image = latex_to_image(params, self.core.config["cache_path"])
+                message.file = image
+            except Exception as e:
+                message.content = f"转换失败喵：{e}"
             await self.reply(message)
